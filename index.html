@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>V K CINEMA WORLD</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #080808;
+      color: white;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.95);
+      padding: 18px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 900;
+      color: #e50914;
+      letter-spacing: 1px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 50px 20px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.35), #080808),
+        radial-gradient(circle at center, #401010, #080808 70%);
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 8vw, 70px);
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #ccc;
+      margin-bottom: 25px;
+    }
+
+    /* SEARCH */
+    .search-box {
+      width: min(700px, 95%);
+      display: flex;
+      background: white;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 17px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    .search-box button {
+      padding: 0 25px;
+      border: none;
+      background: #e50914;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* CATEGORIES */
+    .categories {
+      padding: 20px 5%;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+    }
+
+    .categories button {
+      background: #222;
+      color: white;
+      border: 1px solid #444;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .categories button:hover {
+      background: #e50914;
+    }
+
+    /* MOVIES */
+    .section {
+      padding: 10px 5% 50px;
+    }
+
+    .section h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+    }
+
+    .movie {
+      background: #151515;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .movie:hover {
+      transform: scale(1.04);
+    }
+
+    .movie img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .movie-info {
+      padding: 12px;
+    }
+
+    .movie-title {
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rating {
+      color: #ffd700;
+      margin-top: 7px;
+      font-size: 14px;
+    }
+
+    /* LOADING */
+    #loading {
+      text-align: center;
+      padding: 30px;
+      color: #aaa;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      inset: 0;
+      background: rgba(0,0,0,.85);
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .modal-box {
+      max-width: 850px;
+      margin: 50px auto;
+      background: #181818;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      z-index: 5;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .modal-content {
+      padding: 25px;
+    }
+
+    .modal-content h2 {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .modal-content p {
+      color: #ccc;
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+
+    .trailer {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: 0;
+      margin-top: 15px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 30px;
+      background: #050505;
+      color: #888;
+    }
+
+    /* MOBILE */
+    @media(max-width: 900px) {
+      .movie-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .movie img {
+        height: 250px;
+      }
+    }
+
+    @media(max-width: 650px) {
+      nav {
+        display: none;
+      }
+
+      .movie-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .movie img {
+        height: 260px;
+      }
+
+      .hero {
+        min-height: 380px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">V K CINEMA WORLD</div>
+
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#movies">Movies</a>
+    </nav>
+  </header>
+
+
+  <!-- HERO + SEARCH -->
+  <section class="hero" id="home">
+
+    <h1>V K CINEMA WORLD</h1>
+
+    <p>Search your favourite movies 🎬</p>
+
+    <div class="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search movies..."
+      >
+
+      <button onclick="searchMovies()">Search</button>
+    </div>
+
+  </section>
+
+
+  <!-- CATEGORIES -->
+  <div class="categories" id="categories">
+    <button onclick="loadMovies()">All</button>
+  </div>
+
+
+  <!-- MOVIES -->
+  <section class="section" id="movies">
+
+    <h2>🔥 Popular Movies</h2>
+
+    <div id="loading">
+      Movies loading...
+    </div>
+
+    <div class="movie-grid" id="movieGrid"></div>
+
+  </section>
+
+
+  <!-- MODAL -->
+  <div class="modal" id="movieModal">
+
+    <div class="modal-box">
+
+      <span class="close" onclick="closeModal()">×</span>
+
+      <div class="modal-content">
+
+        <h2 id="modalTitle"></h2>
+
+        <div id="modalRating"></div>
+
+        <p id="modalOverview"></p>
+
+        <div id="trailerContainer"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 V K CINEMA WORLD</p>
+    <p style="margin-top:8px;">
+      This product uses the TMDB API but is not endorsed or certified by TMDB.
+    </p>
+  </footer>
+
+
+<script>
+
+  /*
+  ==========================================
+  अपनी TMDB API KEY यहाँ डालो
+  ==========================================
+  */
+
+  const API_KEY = "71798164c531ae136746e30ea31e384bc4ab72523d9c2dbf";
+
+  const BASE_URL = "https://api.themoviedb.org/3";
+
+  const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+
+
+  const movieGrid = document.getElementById("movieGrid");
+  const loading = document.getElementById("loading");
+
+
+  /*
+  ==========================================
+  MOVIES LOAD
+  ==========================================
+  */
+
+  async function loadMovies() {
+
+    loading.style.display = "block";
+    movieGrid.innerHTML = "";
+
+    try {
+
+      const response = await fetch(
+        `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=1`
+      );
+
+      const data = await response.json();
+
+      showMovies(data.results.slice(0, 20));
+
+    } catch (error) {
+
+      loading.innerText =
+        "Movies load नहीं हो पाईं। API Key check करो।";
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+  ==========================================
+  SHOW 20 MOVIES
+  ==========================================
+  */
+
+  function showMovies(movies) {
+
+    loading.style.display = "none";
+
+    movieGrid.innerHTML = "";
+
+    if (!movies || movies.length === 0) {
+
+      movieGrid.innerHTML =
+        "<p>कोई movie नहीं मिली।</p>";
+
+      return;
+    }
+
+
+    movies.slice(0, 20).forEach(movie => {
+
+      const poster = movie.poster_path
+        ? IMAGE_URL + movie.poster_path
+        : "https://via.placeholder.com/500x750?text=No+Poster";
+
+
+      const card = document.createElement("div");
+
+      card.className = "movie";
+
+      card.innerHTML = `
+
+        <img
+          src="${poster}"
+          alt="${escapeHTML(movie.title)}"
+          loading="lazy"
+        >
+
+        <div class="movie-info">
+
+          <div class="movie-title">
+            ${escapeHTML(movie.title)}
+          </div>
+
+          <div class="rating">
+            ⭐ ${movie.vote_average
+              ? movie.vote_average.toFixed(1)
+              : "N/A"}
+          </div>
+
+        </div>
+
+      `;
+
+
+      card.onclick = () => showDetails(movie.id);
+
+      movieGrid.appendChild(card);
+
+    });
+
+  }
+
+
+  /*
+  ==========================================
+  SEARCH
+  ==========================================
+  */
+
+  async function searchMovies() {
+
+    const query =
+      document.getElementById("searchInput").value.trim();
+
+
+    if (!query) {
+
+      loadMovies();
+
+      return;
+    }
+
+
+    loading.style.display = "block";
+    movieGrid.innerHTML = "";
+
+
+    try {
+
+      const response = await fetch(
+        `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}`
+      );
+
+      const data = await response.json();
+
+      showMovies(data.results.slice(0, 20));
+
+    } catch (error) {
+
+      loading.innerText = "Search में समस्या हुई।";
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+  ==========================================
+  ENTER PRESS SEARCH
+  ==========================================
+  */
+
+  document
+    .getElementById("searchInput")
+    .addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+
+        searchMovies();
+
+      }
+
+    });
+
+
+  /*
+  ==========================================
+  GENRES
+  ==========================================
+  */
+
+  async function loadGenres() {
+
+    try {
+
+      const response = await fetch(
+        `${BASE_URL}/genre/movie/list?api_key=${API_KEY}&language=en`
+      );
+
+      const data = await response.json();
+
+      const container =
+        document.getElementById("categories");
+
+
+      data.genres.forEach(genre => {
+
+        const button =
+          document.createElement("button");
+
+        button.innerText = genre.name;
+
+        button.onclick = () =>
+          loadGenre(genre.id);
+
+        container.appendChild(button);
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+  ==========================================
+  GENRE MOVIES
+  ==========================================
+  */
+
+  async function loadGenre(genreId) {
+
+    loading.style.display = "block";
+    movieGrid.innerHTML = "";
+
+
+    try {
+
+      const response = await fetch(
+        `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=${genreId}&sort_by=popularity.desc&page=1`
+      );
+
+      const data = await response.json();
+
+      showMovies(data.results.slice(0, 20));
+
+    } catch (error) {
+
+      loading.innerText = "Category load नहीं हुई।";
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+  ==========================================
+  MOVIE DETAILS
+  ==========================================
+  */
+
+  async function showDetails(movieId) {
+
+    const modal =
+      document.getElementById("movieModal");
+
+
+    modal.style.display = "block";
+
+
+    document.getElementById("modalTitle")
+      .innerText = "Loading...";
+
+
+    document.getElementById("modalOverview")
+      .innerText = "";
+
+
+    document.getElementById("trailerContainer")
+      .innerHTML = "";
+
+
+    try {
+
+      const response = await fetch(
+        `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US&append_to_response=videos`
+      );
+
+
+      const movie = await response.json();
+
+
+      document.getElementById("modalTitle")
+        .innerText = movie.title;
+
+
+      document.getElementById("modalRating")
+        .innerText =
+        "⭐ Rating: " +
+        (movie.vote_average
+          ? movie.vote_average.toFixed(1)
+          : "N/A");
+
+
+      document.getElementById("modalOverview")
+        .innerText =
+        movie.overview || "Description available नहीं है।";
+
+
+      const videos =
+        movie.videos &&
+        movie.videos.results
+          ? movie.videos.results
+          : [];
+
+
+      const trailer =
+        videos.find(
+          video =>
+            video.site === "YouTube" &&
+            video.type === "Trailer"
+        );
+
+
+      if (trailer) {
+
+        document.getElementById("trailerContainer")
+          .innerHTML = `
+
+          <iframe
+            class="trailer"
+            src="https://www.youtube.com/embed/${trailer.key}"
+            allowfullscreen>
+          </iframe>
+
+        `;
+
+      }
+
+    } catch (error) {
+
+      document.getElementById("modalTitle")
+        .innerText = "Movie details नहीं मिले।";
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+  ==========================================
+  CLOSE MODAL
+  ==========================================
+  */
+
+  function closeModal() {
+
+    document.getElementById("movieModal")
+      .style.display = "none";
+
+    document.getElementById("trailerContainer")
+      .innerHTML = "";
+
+  }
+
+
+  /*
+  ==========================================
+  HTML SECURITY HELPER
+  ==========================================
+  */
+
+  function escapeHTML(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text || "";
+
+    return div.innerHTML;
+
+  }
+
+
+  /*
+  ==========================================
+  START WEBSITE
+  ==========================================
+  */
+
+  loadGenres();
+
+  loadMovies();
+
+</script>
+
+</body>
+</html>
