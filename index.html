@@ -6,6 +6,9 @@
 
   <title>V K CINEMA WORLD</title>
 
+  <!-- WEBSITE LOGO -->
+  <link rel="icon" type="image/png" href="logo.png">
+
   <style>
     * {
       margin: 0;
@@ -19,7 +22,6 @@
       color: white;
     }
 
-    /* HEADER */
     header {
       position: sticky;
       top: 0;
@@ -44,7 +46,6 @@
       margin-left: 20px;
     }
 
-    /* HERO */
     .hero {
       min-height: 430px;
       display: flex;
@@ -68,7 +69,6 @@
       margin-bottom: 25px;
     }
 
-    /* SEARCH */
     .search-box {
       width: min(700px, 95%);
       display: flex;
@@ -94,7 +94,6 @@
       cursor: pointer;
     }
 
-    /* CATEGORIES */
     .categories {
       padding: 20px 5%;
       display: flex;
@@ -116,7 +115,6 @@
       background: #e50914;
     }
 
-    /* MOVIES */
     .section {
       padding: 10px 5% 50px;
     }
@@ -168,14 +166,12 @@
       font-size: 14px;
     }
 
-    /* LOADING */
     #loading {
       text-align: center;
       padding: 30px;
       color: #aaa;
     }
 
-    /* MODAL */
     .modal {
       display: none;
       position: fixed;
@@ -226,7 +222,6 @@
       margin-top: 15px;
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 30px;
@@ -234,7 +229,6 @@
       color: #888;
     }
 
-    /* MOBILE */
     @media(max-width: 900px) {
       .movie-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -267,7 +261,6 @@
 
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="logo">V K CINEMA WORLD</div>
 
@@ -277,8 +270,6 @@
     </nav>
   </header>
 
-
-  <!-- HERO + SEARCH -->
   <section class="hero" id="home">
 
     <h1>V K CINEMA WORLD</h1>
@@ -297,14 +288,10 @@
 
   </section>
 
-
-  <!-- CATEGORIES -->
   <div class="categories" id="categories">
     <button onclick="loadMovies()">All</button>
   </div>
 
-
-  <!-- MOVIES -->
   <section class="section" id="movies">
 
     <h2>🔥 Popular Movies</h2>
@@ -317,8 +304,6 @@
 
   </section>
 
-
-  <!-- MODAL -->
   <div class="modal" id="movieModal">
 
     <div class="modal-box">
@@ -341,40 +326,25 @@
 
   </div>
 
-
-  <!-- FOOTER -->
   <footer>
     <p>© 2026 V K CINEMA WORLD</p>
+
     <p style="margin-top:8px;">
       This product uses the TMDB API but is not endorsed or certified by TMDB.
     </p>
   </footer>
 
-
 <script>
 
-  /*
-  ==========================================
-  अपनी TMDB API KEY यहाँ डालो
-  ==========================================
-  */
-
-  const API_KEY = "d4d26620294db5cb131a67b8de0a47b0";
+  const API_KEY = "d4d26620294db5cb131a67b8de0a47bo";
 
   const BASE_URL = "https://api.themoviedb.org/3";
 
   const IMAGE_URL = "https://image.tmdb.org/t/p/w500";
 
-
   const movieGrid = document.getElementById("movieGrid");
   const loading = document.getElementById("loading");
 
-
-  /*
-  ==========================================
-  MOVIES LOAD
-  ==========================================
-  */
 
   async function loadMovies() {
 
@@ -394,7 +364,7 @@
     } catch (error) {
 
       loading.innerText =
-        "Movies load नहीं हो पाईं। API Key check करो।";
+        "Movies load नहीं हो पाईं। API Key check करो.";
 
       console.error(error);
 
@@ -402,12 +372,6 @@
 
   }
 
-
-  /*
-  ==========================================
-  SHOW 20 MOVIES
-  ==========================================
-  */
 
   function showMovies(movies) {
 
@@ -423,13 +387,11 @@
       return;
     }
 
-
     movies.slice(0, 20).forEach(movie => {
 
       const poster = movie.poster_path
         ? IMAGE_URL + movie.poster_path
         : "https://via.placeholder.com/500x750?text=No+Poster";
-
 
       const card = document.createElement("div");
 
@@ -459,7 +421,6 @@
 
       `;
 
-
       card.onclick = () => showDetails(movie.id);
 
       movieGrid.appendChild(card);
@@ -469,17 +430,10 @@
   }
 
 
-  /*
-  ==========================================
-  SEARCH
-  ==========================================
-  */
-
   async function searchMovies() {
 
     const query =
       document.getElementById("searchInput").value.trim();
-
 
     if (!query) {
 
@@ -488,10 +442,8 @@
       return;
     }
 
-
     loading.style.display = "block";
     movieGrid.innerHTML = "";
-
 
     try {
 
@@ -505,7 +457,7 @@
 
     } catch (error) {
 
-      loading.innerText = "Search में समस्या हुई।";
+      loading.innerText = "Search में समस्या हुई.";
 
       console.error(error);
 
@@ -513,12 +465,6 @@
 
   }
 
-
-  /*
-  ==========================================
-  ENTER PRESS SEARCH
-  ==========================================
-  */
 
   document
     .getElementById("searchInput")
@@ -533,12 +479,6 @@
     });
 
 
-  /*
-  ==========================================
-  GENRES
-  ==========================================
-  */
-
   async function loadGenres() {
 
     try {
@@ -551,7 +491,6 @@
 
       const container =
         document.getElementById("categories");
-
 
       data.genres.forEach(genre => {
 
@@ -576,17 +515,10 @@
   }
 
 
-  /*
-  ==========================================
-  GENRE MOVIES
-  ==========================================
-  */
-
   async function loadGenre(genreId) {
 
     loading.style.display = "block";
     movieGrid.innerHTML = "";
-
 
     try {
 
@@ -600,7 +532,7 @@
 
     } catch (error) {
 
-      loading.innerText = "Category load नहीं हुई।";
+      loading.innerText = "Category load नहीं हुई.";
 
       console.error(error);
 
@@ -609,32 +541,21 @@
   }
 
 
-  /*
-  ==========================================
-  MOVIE DETAILS
-  ==========================================
-  */
-
   async function showDetails(movieId) {
 
     const modal =
       document.getElementById("movieModal");
 
-
     modal.style.display = "block";
-
 
     document.getElementById("modalTitle")
       .innerText = "Loading...";
 
-
     document.getElementById("modalOverview")
       .innerText = "";
 
-
     document.getElementById("trailerContainer")
       .innerHTML = "";
-
 
     try {
 
@@ -642,13 +563,10 @@
         `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}&language=en-US&append_to_response=videos`
       );
 
-
       const movie = await response.json();
-
 
       document.getElementById("modalTitle")
         .innerText = movie.title;
-
 
       document.getElementById("modalRating")
         .innerText =
@@ -657,11 +575,9 @@
           ? movie.vote_average.toFixed(1)
           : "N/A");
 
-
       document.getElementById("modalOverview")
         .innerText =
-        movie.overview || "Description available नहीं है।";
-
+        movie.overview || "Description available नहीं है.";
 
       const videos =
         movie.videos &&
@@ -669,14 +585,12 @@
           ? movie.videos.results
           : [];
 
-
       const trailer =
         videos.find(
           video =>
             video.site === "YouTube" &&
             video.type === "Trailer"
         );
-
 
       if (trailer) {
 
@@ -696,7 +610,7 @@
     } catch (error) {
 
       document.getElementById("modalTitle")
-        .innerText = "Movie details नहीं मिले।";
+        .innerText = "Movie details नहीं मिले.";
 
       console.error(error);
 
@@ -704,12 +618,6 @@
 
   }
 
-
-  /*
-  ==========================================
-  CLOSE MODAL
-  ==========================================
-  */
 
   function closeModal() {
 
@@ -722,12 +630,6 @@
   }
 
 
-  /*
-  ==========================================
-  HTML SECURITY HELPER
-  ==========================================
-  */
-
   function escapeHTML(text) {
 
     const div = document.createElement("div");
@@ -738,12 +640,6 @@
 
   }
 
-
-  /*
-  ==========================================
-  START WEBSITE
-  ==========================================
-  */
 
   loadGenres();
 
